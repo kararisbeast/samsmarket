@@ -22,14 +22,17 @@ buttons.forEach((button, index) => {
 });
 
 slider.addEventListener('touchstart', function(event) {
+    event.preventDefault();
     startX = event.touches[0].clientX;
 });
 
 slider.addEventListener('touchmove', function(event) {
+    event.preventDefault();
     // No need to do anything here for now
 });
 
 slider.addEventListener('touchend', function(event) {
+    event.preventDefault();
     const endX = event.changedTouches[0].clientX;
     const diffX = startX - endX;
 
