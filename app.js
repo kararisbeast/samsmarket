@@ -22,17 +22,10 @@ buttons.forEach((button, index) => {
 });
 
 slider.addEventListener('touchstart', function(event) {
-    event.preventDefault();
     startX = event.touches[0].clientX;
 });
 
-slider.addEventListener('touchmove', function(event) {
-    event.preventDefault();
-    // No need to do anything here for now
-});
-
 slider.addEventListener('touchend', function(event) {
-    event.preventDefault();
     const endX = event.changedTouches[0].clientX;
     const diffX = startX - endX;
 
@@ -46,7 +39,14 @@ slider.addEventListener('touchend', function(event) {
             currentIndex = (currentIndex - 1 + buttons.length) % buttons.length;
             console.log('Swiping right');
         }
-        buttons[currentIndex].click();
+        // Scroll to the target position after updating currentIndex
+        const slideWidth = slider.offsetWidth;
+        const targetScroll = slideWidth * currentIndex;
+        slider.scrollTo({
+            left: targetScroll,
+            behavior: 'smooth'
+        });
+        buttons[currentIndex].click(); // Simulate button click
     }
 });
 
@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Start the automatic cycling when the page loads
     startAutoCycle();
 
-    // Function to reset the 5-second timer when a button is clicked
+    // Function to reset the timer when a button is clicked
     function resetTimer() {
         clearInterval(intervalId);  // Clear the existing interval
         startResetCycle();  // Restart the interval
@@ -81,3 +81,4 @@ document.addEventListener('DOMContentLoaded', function() {
         button.addEventListener('click', resetTimer);
     });
 });
+
