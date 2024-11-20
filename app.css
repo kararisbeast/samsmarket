@@ -75,6 +75,15 @@ p {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
+@media (max-width: 768px) {
+    #top-image {
+        height: 30vh; /* Reduce height on smaller screens */
+        background-size: 110%;
+        background-attachment: scroll;
+        background-repeat: no-repeat;
+    }
+}
+
 #title {
     height: 100px;
     display: flex;
