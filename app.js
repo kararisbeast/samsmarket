@@ -1,8 +1,9 @@
 const slider = document.querySelector('.slider');
 const buttons = document.querySelectorAll('.buttons');
 
-let startX;
 let currentIndex = 0;
+let intervalId;
+let startX;
 
 // Add click event listeners to each button
 buttons.forEach((button, index) => {
@@ -20,24 +21,49 @@ buttons.forEach((button, index) => {
     });
 });
 
-document.addEventListener('DOMContentLoaded', function() {
-    let intervalId;
+slider.addEventListener('touchstart', function(event) {
+    startX = event.touches[0].clientX;
+});
 
-    // Function to simulate a click on the current button
-    function pressButton() {
+slider.addEventListener('touchmove', function(event) {
+    // No need to do anything here for now
+});
+
+slider.addEventListener('touchend', function(event) {
+    const endX = event.changedTouches[0].clientX;
+    const diffX = startX - endX;
+
+    if (Math.abs(diffX) > 50) { // Threshold for swipe detection
+        if (diffX > 0) {
+            // Swipe left, show next image
+            currentIndex = (currentIndex + 1) % buttons.length;
+            console.log('Swiping left');
+        } else {
+            // Swipe right, show previous image
+            currentIndex = (currentIndex - 1 + buttons.length) % buttons.length;
+            console.log('Swiping right');
+        }
         buttons[currentIndex].click();
-        currentIndex = (currentIndex + 1) % buttons.length; // Loop back to 0 after reaching the last button
     }
+});
 
-    // Function to start the automatic cycling of buttons every 5 seconds
-    function startAutoCycle() {
-        intervalId = setInterval(pressButton, 5000);
-    }
+// Function to simulate a click on the current button
+function pressButton() {
+    buttons[currentIndex].click();
+    currentIndex = (currentIndex + 1) % buttons.length; // Loop back to 0 after reaching the last button
+}
 
-    function startResetCycle() {
-        intervalId = setInterval(pressButton, 7000);
-    }
+// Function to start the automatic cycling of buttons every 5 seconds
+function startAutoCycle() {
+    intervalId = setInterval(pressButton, 5000);
+}
 
+// Function to start the automatic cycling of buttons every 7 seconds
+function startResetCycle() {
+    intervalId = setInterval(pressButton, 7000);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
     // Start the automatic cycling when the page loads
     startAutoCycle();
 
@@ -51,39 +77,4 @@ document.addEventListener('DOMContentLoaded', function() {
     buttons.forEach(button => {
         button.addEventListener('click', resetTimer);
     });
-
-    // Add touch event listeners for swipe functionality
-    slider.addEventListener('touchstart', handleTouchStart, false);
-    slider.addEventListener('touchmove', handleTouchMove, false);
-    slider.addEventListener('touchend', handleTouchEnd, false);
-
-    function handleTouchStart(event) {
-        startX = event.touches[0].clientX;
-    }
-
-    function handleTouchMove(event) {
-        if (!startX) {
-            return;
-        }
-
-        const currentX = event.touches[0].clientX;
-        const diffX = startX - currentX;
-
-        if (Math.abs(diffX) > 50) { // Threshold for swipe detection
-            if (diffX > 0) {
-                // Swipe left
-                currentIndex = (currentIndex + 1) % buttons.length;
-            } else {
-                // Swipe right
-                currentIndex = (currentIndex - 1 + buttons.length) % buttons.length;
-            }
-            buttons[currentIndex].click();
-            startX = null; // Reset startX to prevent multiple swipes
-        }
-    }
-
-    function handleTouchEnd() {
-        startX = null; // Reset startX when touch ends
-    }
 });
-    
