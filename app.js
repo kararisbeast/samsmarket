@@ -21,35 +21,6 @@ buttons.forEach((button, index) => {
     });
 });
 
-slider.addEventListener('touchstart', function(event) {
-    startX = event.touches[0].clientX;
-});
-
-slider.addEventListener('touchend', function(event) {
-    const endX = event.changedTouches[0].clientX;
-    const diffX = startX - endX;
-
-    if (Math.abs(diffX) > 50) { // Threshold for swipe detection
-        if (diffX > 0) {
-            // Swipe left, show next image
-            currentIndex = (currentIndex + 1) % buttons.length;
-            console.log('Swiping left');
-        } else {
-            // Swipe right, show previous image
-            currentIndex = (currentIndex - 1 + buttons.length) % buttons.length;
-            console.log('Swiping right');
-        }
-        // Scroll to the target position after updating currentIndex
-        const slideWidth = slider.offsetWidth;
-        const targetScroll = slideWidth * currentIndex;
-        slider.scrollTo({
-            left: targetScroll,
-            behavior: 'smooth'
-        });
-        buttons[currentIndex].click(); // Simulate button click
-    }
-});
-
 // Function to simulate a click on the current button
 function pressButton() {
     buttons[currentIndex].click();
